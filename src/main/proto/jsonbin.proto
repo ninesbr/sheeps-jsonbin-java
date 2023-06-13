@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package pb;
+option java_package = "com.sheeps.jsonbin.pb";
+
+
+// Request
+
+message CountDocsRequest {
+  string target = 1;
+  map<string, string> query = 2;
+}
+
+message GetDocsRequest {
+  string target = 1;
+  map<string, string> query = 2;
+}
+
+message GetDocRequest {
+  string target = 1;
+  string uniqueId = 2;
+}
+
+message PushDocsRequest {
+  string target = 1;
+  repeated bytes documents = 2;
+}
+
+message DeleteDocsRequest {
+  string target = 1;
+  repeated string uniqueIds = 2;
+}
+
+message PatchDocsRequest {
+  string target = 1;
+  repeated bytes documents = 2;
+}
+
+// Response
+
+message CountDocsResponse {
+  int64 total = 1;
+}
+
+message GetDocsResponse {
+  bytes documents = 1;
+  int64 limit = 2;
+  int64 offset = 3;
+}
+
+message GetDocsStreamResponse {
+  bytes document = 1;
+  int64 limit = 2;
+  int64 offset = 3;
+}
+
+message GetDocResponse {
+  bytes document = 1;
+}
+
+message PushDocsResponse {
+  repeated string uniqueIds = 1;
+}
+
+message DeleteDocsResponse {
+  repeated string uniqueIds = 1;
+}
+
+message PatchDocsResponse {
+  repeated string uniqueIds = 1;
+}
+
+service JsonStorageService {
+  rpc GetDocument(GetDocRequest) returns(GetDocResponse){};
+  rpc GetDocuments(GetDocsRequest) returns(GetDocsResponse){};
+  rpc GetStreamDocuments(GetDocsRequest) returns(stream GetDocsStreamResponse){};
+  rpc CountDocuments(CountDocsRequest) returns(CountDocsResponse){};
+  rpc PushDocuments(PushDocsRequest) returns(PushDocsResponse){};
+  rpc PatchDocuments(PatchDocsRequest) returns(PatchDocsResponse){};
+  rpc DeleteDocuments(DeleteDocsRequest) returns(DeleteDocsResponse){};
+}
